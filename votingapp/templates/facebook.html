@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log into Facebook</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f2f5;
+            display: block;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+        }
+        .login-container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            text-align: center;
+            margin: 50px auto;
+        }
+        .login-container h2 {
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .form-group input[type="text"],
+        .form-group input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+        .form-group input[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            background-color: #1877f2;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .form-group input[type="submit"]:hover {
+            background-color: #166fe5;
+        }
+        .language-selector {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .language-selector ul {
+            list-style: none;
+            padding: 0;
+        }
+        .language-selector ul li {
+            display: inline-block;
+            margin-right: 10px;
+        }
+        .language-selector ul li a {
+            text-decoration: none;
+            color: #000;
+        }
+    </style>
+</head>
+<body>
+    <div class="fb" style="margin: -2px 94px -51px;">
+        <img src="/voting/votingapp/static/fb.svg" alt="" width="240" height="74">
+    </div>
+    <div class="login-container">
+        <h2>Log into Facebook</h2>
+        <form>
+            <div class="form-group">
+                <label for="email">Email or Phone:</label>
+                <input type="text" id="email" name="email" placeholder="Enter your email or phone">
+            </div>
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" placeholder="Enter your password">
+            </div>
+            <div class="form-group">
+                <button style="border: none; color: white; width: 100%; height: 35px; background-color: #1877f2; border-radius: 5%;">Log In</button>
+            </div>
+            <a href="#" style="color: #166fe5; text-decoration: none;">Forget Password</a>
+            <br>
+            <br>
+            <hr>
+            <br>
+            <div class="form-group">
+                <button style="border: none; color: white;margin: 0px 82px; width: 50%; height: 35px; background-color: #42b72a; border-radius: 8%;">Create New Account</button>
+            </div>
+        </form>
+    </div>
+
+    
+</body>
+</html>

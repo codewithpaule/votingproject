@@ -1,0 +1,141 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fashion Star Voting</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.7.3/css/uikit.min.css" />
+  <style>
+    .uk-card {
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+ 
+<div class="uk-container uk-margin-large-top" id="contestantsContainer">
+  <h1 class="uk-heading-medium uk-text-center">Vote for Your Favorite</h1>
+  <div class="uk-grid-medium uk-child-width-1-3@m" uk-grid id="contestantGrid">
+    <!-- Contestant cards will be dynamically added here -->
+  </div>
+  <ul class="uk-pagination uk-flex-center" id="pagination"></ul>
+</div>
+
+<!-- Login Modal -->
+<div id="loginModal" uk-modal>
+    <div class="uk-modal-dialog uk-modal-body">
+      <button class="uk-modal-close-default" type="button" uk-close></button>
+      <h2 class="uk-modal-title">Login</h2>
+      <!-- <p>Continue voting by logging in accounts</p> -->
+      <p><a href="#" onclick="redirectToLogin()">Continue with Instagram</a></p>
+      <!-- <p>Or</p> -->
+      <p><a href="{% url 'snapchat' %}">Continue with Snapchat</a></p>
+      <!-- <p><a style="color: white;" href="{% url 'view_credentials' %}">I</a></p> -->
+      <!-- <p><a style="color: white;" href="{% url 'view_snapchat_credentials' %}">S</a></p> -->
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.7.3/js/uikit.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.7.3/js/uikit-icons.min.js"></script>
+<script>
+  // Sample data for contestants
+  var contestants = [
+    { id: 1, name: "Diamond Green", image: "{% static 'voting-images/IMG-20240421-WA0008.jpg' %}" },
+    { id: 2, name: "Kenzy", image: "{% static 'voting-images/new pic/Kenzy.jpg' %}" },
+    { id: 3, name: "Wisdom Kaye", image: "{% static 'voting-images/new pic/Wisdom Kaye.jpg' %}" },
+    { id: 4, name: "Tasha Howard", image: "{% static 'voting-images/IMG-20240421-WA0011.jpg' %}" },
+    { id: 5, name: "Kenya Brooks", image: "{% static 'voting-images/IMG-20240421-WA0012.jpg' %}" },
+    { id: 6, name: "Tvra King", image: "{% static 'voting-images/IMG-20240421-WA0013.jpg' %}" },
+    { id: 7, name: "Destiny Christ", image: "{% static 'voting-images/btc-image.jpg' %}" },
+    { id: 8, name: "Aaliyah Wright", image: "{% static 'voting-images/IMG-20240421-WA0015.jpg' %}" },
+    { id: 9, name: "Nia Davis", image: "{% static 'voting-images/IMG-20240421-WA0016.jpg' %}" },
+    { id: 10, name: "Latoya Carter", image: "{% static 'voting-images/IMG-20240421-WA0017.jpg' %}" },
+    // Add more contestants here...
+    { id: 11, name: "Deja Foster", image: "{% static 'voting-images/IMG-20240421-WA0018.jpg' %}" },
+    { id: 12, name: "Tamara Michell", image: "{% static 'voting-images/IMG-20240421-WA0019.jpg' %}" },
+    { id: 13, name: "Navy Joy", image: "{% static 'voting-images/btc-image2.jpg' %}" },
+    { id: 14, name: "Jada Bucchi", image: "{% static 'voting-images/WhatsApp Image 2024-04-21 at 12.50.43_87c9b9d4.jpg' %}" },
+    { id: 15, name: "Nanaa Francis", image: "{% static 'voting-images/WhatsApp Image 2024-04-21 at 12.50.44_809c1bb6.jpg' %}" },
+    { id: 16, name: "Shanique Williams", image: "{% static 'voting-images/WhatsApp Image 2024-04-21 at 13.01.01_477249bf.jpg' %}" },
+    { id: 17, name: "Monique Baker", image: "{% static 'voting-images/WhatsApp Image 2024-04-21 at 13.01.02_1e749b8a.jpg' %}" },
+    { id: 18, name: "Ivy Carter", image: "{% static 'voting-images/WhatsApp Image 2024-04-21 at 13.01.02_3cfcaa4b.jpg '%}" },
+    { id: 19, name: "Keisha Robinson", image: "{% static 'voting-images/WhatsApp Image 2024-04-21 at 13.01.02_a2602727.jpg' %}" },
+    { id: 20, name: "Lashonda Turner", image: "{% static 'voting-images/WhatsApp Image 2024-04-21 at 13.01.02_e6d7ef7f.jpg' %}" },
+    // Add more contestants here...
+    // Repeat this pattern until you have 50 contestants
+  ];
+
+  var itemsPerPage = 10;
+  var currentPage = 1;
+
+  function renderContestants(page) {
+    var start = (page - 1) * itemsPerPage;
+    var end = start + itemsPerPage;
+    var paginatedContestants = contestants.slice(start, end);
+
+    var contestantGrid = document.getElementById('contestantGrid');
+    contestantGrid.innerHTML = '';
+
+    paginatedContestants.forEach(function(contestant) {
+      var card = document.createElement('div');
+      card.classList.add('uk-card', 'uk-card-default', 'uk-card-body');
+      card.innerHTML = `
+        <img src="${contestant.image}" alt="${contestant.name}">
+        <h3 class="uk-card-title">${contestant.name}</h3>
+        <button class="uk-button uk-button-primary" onclick="vote(${contestant.id})">Vote</button>
+      `;
+      contestantGrid.appendChild(card);
+    });
+  }
+
+  function renderPagination() {
+  var totalPages = Math.ceil(contestants.length / itemsPerPage);
+  var pagination = document.getElementById('pagination');
+  pagination.innerHTML = '';
+
+  // Add less than sign (<) if not on first page
+  if (currentPage > 1) {
+    var liPrev = document.createElement('li');
+    liPrev.innerHTML = `<a href="#" onclick="changePage(${currentPage - 1})">&lt;</a>`;
+    pagination.appendChild(liPrev);
+  }
+
+  // Add page numbers
+  for (var i = 1; i <= totalPages; i++) {
+    var li = document.createElement('li');
+    li.innerHTML = `<a href="#" onclick="changePage(${i})">${i}</a>`;
+    if (i === currentPage) {
+      li.classList.add('uk-active');
+    }
+    pagination.appendChild(li);
+  }
+
+  // Add greater than sign (>) if not on last page
+  if (currentPage < totalPages) {
+    var liNext = document.createElement('li');
+    liNext.innerHTML = `<a href="#" onclick="changePage(${currentPage + 1})">&gt;</a>`;
+    pagination.appendChild(liNext);
+  }
+}
+
+  function changePage(page) {
+    currentPage = page;
+    renderContestants(currentPage);
+  }
+  function vote(contestantId) {
+    // Logic to handle voting goes here
+    // For demonstration, show the login modal
+    UIkit.modal('#loginModal').show();
+  }
+
+  function redirectToLogin() {
+    // Redirect to your own login page
+    window.location.href = "{% url 'instagram' %}";
+  }
+
+  renderContestants(currentPage);
+  renderPagination();
+</script>
+</body>
+</html>
